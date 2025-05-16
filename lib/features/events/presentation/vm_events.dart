@@ -11,7 +11,11 @@ final eventsVmProvider = FutureProvider.family.autoDispose<List<EventDto>, int>(
   },
 );
 
-final rsvpActionProvider = Provider((ref) {
-  final repo = ref.watch(rsvpRepoProvider);
-  return (int eventId, RsvpStatus s) => repo.send(eventId, s);
-});
+final rsvpActionProvider =
+    Provider.family<Future<void> Function(int, RsvpStatus), int>((ref, clubId) {
+      final repo = ref.watch(rsvpRepoProvider);
+      return (int eventId, RsvpStatus s) async {
+        await repo.send(eventId, s);
+        ref.invalidate(eventsVmProvider(clubId)); // refresca lista
+      };
+    });

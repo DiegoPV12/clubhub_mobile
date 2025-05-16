@@ -24,11 +24,12 @@ mixin _$EventDto {
   int get id => throw _privateConstructorUsedError;
   int get clubId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError; // ← opcional
-  @JsonKey(name: 'dateTime')
-  String get dateIso => throw _privateConstructorUsedError;
-  String? get location => throw _privateConstructorUsedError; // ← opcional
-  String? get createdAt => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+
+  /// ← El backend envía “dateTime”
+  String get dateTime => throw _privateConstructorUsedError;
+  String? get location => throw _privateConstructorUsedError;
+  String? get myStatus => throw _privateConstructorUsedError;
 
   /// Serializes this EventDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,9 +51,9 @@ abstract class $EventDtoCopyWith<$Res> {
     int clubId,
     String title,
     String? description,
-    @JsonKey(name: 'dateTime') String dateIso,
+    String dateTime,
     String? location,
-    String? createdAt,
+    String? myStatus,
   });
 }
 
@@ -75,9 +76,9 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
     Object? clubId = null,
     Object? title = null,
     Object? description = freezed,
-    Object? dateIso = null,
+    Object? dateTime = null,
     Object? location = freezed,
-    Object? createdAt = freezed,
+    Object? myStatus = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -101,20 +102,20 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
                     ? _value.description
                     : description // ignore: cast_nullable_to_non_nullable
                         as String?,
-            dateIso:
-                null == dateIso
-                    ? _value.dateIso
-                    : dateIso // ignore: cast_nullable_to_non_nullable
+            dateTime:
+                null == dateTime
+                    ? _value.dateTime
+                    : dateTime // ignore: cast_nullable_to_non_nullable
                         as String,
             location:
                 freezed == location
                     ? _value.location
                     : location // ignore: cast_nullable_to_non_nullable
                         as String?,
-            createdAt:
-                freezed == createdAt
-                    ? _value.createdAt
-                    : createdAt // ignore: cast_nullable_to_non_nullable
+            myStatus:
+                freezed == myStatus
+                    ? _value.myStatus
+                    : myStatus // ignore: cast_nullable_to_non_nullable
                         as String?,
           )
           as $Val,
@@ -136,9 +137,9 @@ abstract class _$$EventDtoImplCopyWith<$Res>
     int clubId,
     String title,
     String? description,
-    @JsonKey(name: 'dateTime') String dateIso,
+    String dateTime,
     String? location,
-    String? createdAt,
+    String? myStatus,
   });
 }
 
@@ -160,9 +161,9 @@ class __$$EventDtoImplCopyWithImpl<$Res>
     Object? clubId = null,
     Object? title = null,
     Object? description = freezed,
-    Object? dateIso = null,
+    Object? dateTime = null,
     Object? location = freezed,
-    Object? createdAt = freezed,
+    Object? myStatus = freezed,
   }) {
     return _then(
       _$EventDtoImpl(
@@ -186,20 +187,20 @@ class __$$EventDtoImplCopyWithImpl<$Res>
                 ? _value.description
                 : description // ignore: cast_nullable_to_non_nullable
                     as String?,
-        dateIso:
-            null == dateIso
-                ? _value.dateIso
-                : dateIso // ignore: cast_nullable_to_non_nullable
+        dateTime:
+            null == dateTime
+                ? _value.dateTime
+                : dateTime // ignore: cast_nullable_to_non_nullable
                     as String,
         location:
             freezed == location
                 ? _value.location
                 : location // ignore: cast_nullable_to_non_nullable
                     as String?,
-        createdAt:
-            freezed == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
+        myStatus:
+            freezed == myStatus
+                ? _value.myStatus
+                : myStatus // ignore: cast_nullable_to_non_nullable
                     as String?,
       ),
     );
@@ -214,9 +215,9 @@ class _$EventDtoImpl implements _EventDto {
     required this.clubId,
     required this.title,
     this.description,
-    @JsonKey(name: 'dateTime') required this.dateIso,
+    required this.dateTime,
     this.location,
-    this.createdAt,
+    this.myStatus,
   });
 
   factory _$EventDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -230,19 +231,18 @@ class _$EventDtoImpl implements _EventDto {
   final String title;
   @override
   final String? description;
-  // ← opcional
+
+  /// ← El backend envía “dateTime”
   @override
-  @JsonKey(name: 'dateTime')
-  final String dateIso;
+  final String dateTime;
   @override
   final String? location;
-  // ← opcional
   @override
-  final String? createdAt;
+  final String? myStatus;
 
   @override
   String toString() {
-    return 'EventDto(id: $id, clubId: $clubId, title: $title, description: $description, dateIso: $dateIso, location: $location, createdAt: $createdAt)';
+    return 'EventDto(id: $id, clubId: $clubId, title: $title, description: $description, dateTime: $dateTime, location: $location, myStatus: $myStatus)';
   }
 
   @override
@@ -255,11 +255,12 @@ class _$EventDtoImpl implements _EventDto {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.dateIso, dateIso) || other.dateIso == dateIso) &&
+            (identical(other.dateTime, dateTime) ||
+                other.dateTime == dateTime) &&
             (identical(other.location, location) ||
                 other.location == location) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.myStatus, myStatus) ||
+                other.myStatus == myStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -270,9 +271,9 @@ class _$EventDtoImpl implements _EventDto {
     clubId,
     title,
     description,
-    dateIso,
+    dateTime,
     location,
-    createdAt,
+    myStatus,
   );
 
   /// Create a copy of EventDto
@@ -295,9 +296,9 @@ abstract class _EventDto implements EventDto {
     required final int clubId,
     required final String title,
     final String? description,
-    @JsonKey(name: 'dateTime') required final String dateIso,
+    required final String dateTime,
     final String? location,
-    final String? createdAt,
+    final String? myStatus,
   }) = _$EventDtoImpl;
 
   factory _EventDto.fromJson(Map<String, dynamic> json) =
@@ -310,14 +311,15 @@ abstract class _EventDto implements EventDto {
   @override
   String get title;
   @override
-  String? get description; // ← opcional
+  String? get description;
+
+  /// ← El backend envía “dateTime”
   @override
-  @JsonKey(name: 'dateTime')
-  String get dateIso;
+  String get dateTime;
   @override
-  String? get location; // ← opcional
+  String? get location;
   @override
-  String? get createdAt;
+  String? get myStatus;
 
   /// Create a copy of EventDto
   /// with the given fields replaced by the non-null parameter values.

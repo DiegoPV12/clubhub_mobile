@@ -1,5 +1,7 @@
+import 'package:clubhub_mobile/core/widgets/rsvp_chip.dart';
 import 'package:clubhub_mobile/features/clubs/presentation/vm_club_details.dart';
 import 'package:clubhub_mobile/features/events/data/rsvp_repository.dart';
+import 'package:clubhub_mobile/features/events/presentation/attendees_sheet.dart';
 import 'package:clubhub_mobile/features/events/presentation/vm_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,7 +64,8 @@ class ClubDetailPage extends ConsumerWidget {
                             final asyncEvents = ref.watch(
                               eventsVmProvider(clubId),
                             );
-                            final rsvp = ref.watch(rsvpActionProvider);
+
+                            final rsvp = ref.watch(rsvpActionProvider(clubId));
 
                             return asyncEvents.when(
                               loading:
@@ -80,7 +83,7 @@ class ClubDetailPage extends ConsumerWidget {
                                         (_, __) => const Divider(),
                                     itemBuilder: (_, i) {
                                       final ev = list[i];
-                                      final date = DateTime.parse(ev.dateIso);
+                                      final date = DateTime.parse(ev.dateTime);
                                       return ListTile(
                                         title: Text(ev.title),
                                         subtitle: Text(
@@ -88,25 +91,47 @@ class ClubDetailPage extends ConsumerWidget {
                                           '${date.day}/${date.month}/${date.year} '
                                           '${date.hour}:${date.minute.toString().padLeft(2, '0')}',
                                         ),
-
-                                        trailing: PopupMenuButton<RsvpStatus>(
-                                          onSelected: (s) => rsvp(ev.id, s),
-                                          itemBuilder:
-                                              (_) => const [
-                                                PopupMenuItem(
-                                                  value: RsvpStatus.Going,
-                                                  child: Text('Asistiré'),
-                                                ),
-                                                PopupMenuItem(
-                                                  value: RsvpStatus.Maybe,
-                                                  child: Text('Quizá'),
-                                                ),
-                                                PopupMenuItem(
-                                                  value: RsvpStatus.Declined,
-                                                  child: Text('No iré'),
-                                                ),
-                                              ],
-                                          icon: const Icon(Icons.more_vert),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            // botón ver asistentes
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.people_alt,
+                                              ),
+                                              onPressed:
+                                                  () => showModalBottomSheet(
+                                                    context: context,
+                                                    builder:
+                                                        (_) => AttendeesSheet(
+                                                          eventId: ev.id,
+                                                        ),
+                                                  ),
+                                            ),
+                                            // chip estado personal
+                                            RsvpChip(ev.myStatus),
+                                            // menú RSVP
+                                            PopupMenuButton<RsvpStatus>(
+                                              onSelected: (s) => rsvp(ev.id, s),
+                                              itemBuilder:
+                                                  (_) => const [
+                                                    PopupMenuItem(
+                                                      value: RsvpStatus.Going,
+                                                      child: Text('Asistiré'),
+                                                    ),
+                                                    PopupMenuItem(
+                                                      value: RsvpStatus.Maybe,
+                                                      child: Text('Quizá'),
+                                                    ),
+                                                    PopupMenuItem(
+                                                      value:
+                                                          RsvpStatus.Declined,
+                                                      child: Text('No iré'),
+                                                    ),
+                                                  ],
+                                              icon: const Icon(Icons.more_vert),
+                                            ),
+                                          ],
                                         ),
                                       );
                                     },

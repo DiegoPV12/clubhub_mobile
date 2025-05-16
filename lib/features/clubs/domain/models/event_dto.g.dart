@@ -12,9 +12,9 @@ _$EventDtoImpl _$$EventDtoImplFromJson(Map<String, dynamic> json) =>
       clubId: (json['clubId'] as num).toInt(),
       title: json['title'] as String,
       description: json['description'] as String?,
-      dateIso: json['dateTime'] as String,
+      dateTime: json['dateTime'] as String,
       location: json['location'] as String?,
-      createdAt: json['createdAt'] as String?,
+      myStatus: json['myStatus'] as String?,
     );
 
 Map<String, dynamic> _$$EventDtoImplToJson(_$EventDtoImpl instance) =>
@@ -23,7 +23,7 @@ Map<String, dynamic> _$$EventDtoImplToJson(_$EventDtoImpl instance) =>
       'clubId': instance.clubId,
       'title': instance.title,
       'description': instance.description,
-      'dateTime': instance.dateIso,
+      'dateTime': instance.dateTime,
       'location': instance.location,
-      'createdAt': instance.createdAt,
+      'myStatus': instance.myStatus,
     };

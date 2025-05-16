@@ -8,10 +8,13 @@ class EventDto with _$EventDto {
     required int id,
     required int clubId,
     required String title,
-    String? description, // ← opcional
-    required String dateIso,
-    String? location, // ← opcional
-    String? createdAt,
+    String? description,
+
+    /// ← El backend envía “dateTime”
+    required String dateTime,
+
+    String? location,
+    String? myStatus, // Going | Maybe | Declined | null
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
