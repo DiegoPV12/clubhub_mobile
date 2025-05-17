@@ -1,7 +1,9 @@
 import 'package:clubhub_mobile/core/widgets/rsvp_chip.dart';
 import 'package:clubhub_mobile/features/clubs/presentation/vm_club_details.dart';
+import 'package:clubhub_mobile/features/events/data/events_repository.dart';
 import 'package:clubhub_mobile/features/events/data/rsvp_repository.dart';
 import 'package:clubhub_mobile/features/events/presentation/attendees_sheet.dart';
+import 'package:clubhub_mobile/features/events/presentation/event_form_page.dart';
 import 'package:clubhub_mobile/features/events/presentation/vm_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +36,24 @@ class ClubDetailPage extends ConsumerWidget {
             ),
         ],
       ),
+      floatingActionButton:
+          state
+                  .isOwner // ← NUEVO
+              ? FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () async {
+                  final created = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EventFormPage(clubId: clubId),
+                    ),
+                  );
+                  if (created == true) {
+                    ref.invalidate(eventsVmProvider(clubId)); // refresca lista
+                  }
+                },
+              )
+              : null,
       body: state.club.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
@@ -85,6 +105,112 @@ class ClubDetailPage extends ConsumerWidget {
                                       final ev = list[i];
                                       final date = DateTime.parse(ev.dateTime);
                                       return ListTile(
+                                        onLongPress:
+                                            state.isOwner
+                                                ? () async {
+                                                  final action = await showMenu<
+                                                    String
+                                                  >(
+                                                    context: context,
+                                                    position:
+                                                        const RelativeRect.fromLTRB(
+                                                          200,
+                                                          400,
+                                                          0,
+                                                          0,
+                                                        ),
+                                                    items: const [
+                                                      PopupMenuItem(
+                                                        value: 'edit',
+                                                        child: Text('Editar'),
+                                                      ),
+                                                      PopupMenuItem(
+                                                        value: 'delete',
+                                                        child: Text('Eliminar'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                  if (action == 'edit') {
+                                                    final updated =
+                                                        await Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder:
+                                                                (
+                                                                  _,
+                                                                ) => EventFormPage(
+                                                                  clubId:
+                                                                      clubId,
+                                                                  initial:
+                                                                      ev, // pasa EventDto completo
+                                                                ),
+                                                          ),
+                                                        );
+                                                    if (updated == true) {
+                                                      ref.invalidate(
+                                                        eventsVmProvider(
+                                                          clubId,
+                                                        ),
+                                                      );
+                                                    }
+                                                  } else if (action ==
+                                                      'delete') {
+                                                    final ok = await showDialog<
+                                                      bool
+                                                    >(
+                                                      context: context,
+                                                      builder:
+                                                          (_) => AlertDialog(
+                                                            title: const Text(
+                                                              'Eliminar evento',
+                                                            ),
+                                                            content: const Text(
+                                                              '¿Seguro? Esta acción no se puede deshacer.',
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed:
+                                                                    () => Navigator.pop(
+                                                                      context,
+                                                                      false,
+                                                                    ),
+                                                                child:
+                                                                    const Text(
+                                                                      'Cancelar',
+                                                                    ),
+                                                              ),
+                                                              FilledButton(
+                                                                onPressed:
+                                                                    () => Navigator.pop(
+                                                                      context,
+                                                                      true,
+                                                                    ),
+                                                                child:
+                                                                    const Text(
+                                                                      'Eliminar',
+                                                                    ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                    );
+                                                    if (ok == true) {
+                                                      await ref
+                                                          .read(
+                                                            eventsRepoProvider,
+                                                          )
+                                                          .delete(
+                                                            clubId,
+                                                            ev.id,
+                                                          );
+                                                      ref.invalidate(
+                                                        eventsVmProvider(
+                                                          clubId,
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
+                                                }
+                                                : null,
                                         title: Text(ev.title),
                                         subtitle: Text(
                                           '${ev.location ?? 'Sin lugar'} · '
@@ -94,7 +220,6 @@ class ClubDetailPage extends ConsumerWidget {
                                         trailing: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            // botón ver asistentes
                                             IconButton(
                                               icon: const Icon(
                                                 Icons.people_alt,
@@ -108,9 +233,7 @@ class ClubDetailPage extends ConsumerWidget {
                                                         ),
                                                   ),
                                             ),
-                                            // chip estado personal
                                             RsvpChip(ev.myStatus),
-                                            // menú RSVP
                                             PopupMenuButton<RsvpStatus>(
                                               onSelected: (s) => rsvp(ev.id, s),
                                               itemBuilder:

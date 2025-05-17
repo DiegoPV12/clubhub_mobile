@@ -1,23 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'club_dto.dart';
+part of 'club_form_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ClubDtoImpl _$$ClubDtoImplFromJson(Map<String, dynamic> json) =>
-    _$ClubDtoImpl(
-      id: (json['id'] as num).toInt(),
+_$ClubFormDtoImpl _$$ClubFormDtoImplFromJson(Map<String, dynamic> json) =>
+    _$ClubFormDtoImpl(
       name: json['name'] as String,
       description: json['description'] as String,
-      ownerId: (json['ownerId'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$ClubDtoImplToJson(_$ClubDtoImpl instance) =>
+Map<String, dynamic> _$$ClubFormDtoImplToJson(_$ClubFormDtoImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'name': instance.name,
       'description': instance.description,
-      'ownerId': instance.ownerId,
     };

@@ -9,6 +9,7 @@ class ClubDto with _$ClubDto {
     required int id,
     required String name,
     required String description,
+    required int ownerId, // ← NUEVO
   }) = _ClubDto;
 
   factory ClubDto.fromJson(Map<String, dynamic> json) =>

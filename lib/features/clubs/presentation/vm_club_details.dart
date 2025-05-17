@@ -12,21 +12,25 @@ class ClubDetailState {
   final AsyncValue<ClubDto> club;
   final AsyncValue<List<MemberDto>> members;
   final bool isMember;
+  final bool isOwner; // ← NUEVO
 
   ClubDetailState({
     required this.club,
     required this.members,
     required this.isMember,
+    required this.isOwner,
   });
 
   ClubDetailState copyWith({
     AsyncValue<ClubDto>? club,
     AsyncValue<List<MemberDto>>? members,
     bool? isMember,
+    bool? isOwner,
   }) => ClubDetailState(
     club: club ?? this.club,
     members: members ?? this.members,
     isMember: isMember ?? this.isMember,
+    isOwner: isOwner ?? this.isOwner,
   );
 }
 
@@ -42,6 +46,7 @@ class ClubDetailVM extends StateNotifier<ClubDetailState> {
           club: const AsyncLoading(),
           members: const AsyncLoading(),
           isMember: false,
+          isOwner: false, // ← init
         ),
       ) {
     _load();
@@ -65,11 +70,13 @@ class ClubDetailVM extends StateNotifier<ClubDetailState> {
     final club = results[0] as ClubDto;
     final members = results[1] as List<MemberDto>;
     final isMember = members.any((m) => m.userId == _currentUserId);
+    final isOwner = club.ownerId == _currentUserId; // ← cálculo
 
     state = state.copyWith(
       club: AsyncData(club),
       members: AsyncData(members),
       isMember: isMember,
+      isOwner: isOwner,
     );
   }
 

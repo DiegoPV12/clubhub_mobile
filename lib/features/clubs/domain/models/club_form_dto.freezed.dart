@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'club_dto.dart';
+part of 'club_form_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,61 +15,52 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-ClubDto _$ClubDtoFromJson(Map<String, dynamic> json) {
-  return _ClubDto.fromJson(json);
+ClubFormDto _$ClubFormDtoFromJson(Map<String, dynamic> json) {
+  return _ClubFormDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ClubDto {
-  int get id => throw _privateConstructorUsedError;
+mixin _$ClubFormDto {
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  int get ownerId => throw _privateConstructorUsedError;
 
-  /// Serializes this ClubDto to a JSON map.
+  /// Serializes this ClubFormDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of ClubDto
+  /// Create a copy of ClubFormDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ClubDtoCopyWith<ClubDto> get copyWith => throw _privateConstructorUsedError;
+  $ClubFormDtoCopyWith<ClubFormDto> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ClubDtoCopyWith<$Res> {
-  factory $ClubDtoCopyWith(ClubDto value, $Res Function(ClubDto) then) =
-      _$ClubDtoCopyWithImpl<$Res, ClubDto>;
+abstract class $ClubFormDtoCopyWith<$Res> {
+  factory $ClubFormDtoCopyWith(
+    ClubFormDto value,
+    $Res Function(ClubFormDto) then,
+  ) = _$ClubFormDtoCopyWithImpl<$Res, ClubFormDto>;
   @useResult
-  $Res call({int id, String name, String description, int ownerId});
+  $Res call({String name, String description});
 }
 
 /// @nodoc
-class _$ClubDtoCopyWithImpl<$Res, $Val extends ClubDto>
-    implements $ClubDtoCopyWith<$Res> {
-  _$ClubDtoCopyWithImpl(this._value, this._then);
+class _$ClubFormDtoCopyWithImpl<$Res, $Val extends ClubFormDto>
+    implements $ClubFormDtoCopyWith<$Res> {
+  _$ClubFormDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ClubDto
+  /// Create a copy of ClubFormDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? description = null,
-    Object? ownerId = null,
-  }) {
+  $Res call({Object? name = null, Object? description = null}) {
     return _then(
       _value.copyWith(
-            id:
-                null == id
-                    ? _value.id
-                    : id // ignore: cast_nullable_to_non_nullable
-                        as int,
             name:
                 null == name
                     ? _value.name
@@ -80,11 +71,6 @@ class _$ClubDtoCopyWithImpl<$Res, $Val extends ClubDto>
                     ? _value.description
                     : description // ignore: cast_nullable_to_non_nullable
                         as String,
-            ownerId:
-                null == ownerId
-                    ? _value.ownerId
-                    : ownerId // ignore: cast_nullable_to_non_nullable
-                        as int,
           )
           as $Val,
     );
@@ -92,42 +78,33 @@ class _$ClubDtoCopyWithImpl<$Res, $Val extends ClubDto>
 }
 
 /// @nodoc
-abstract class _$$ClubDtoImplCopyWith<$Res> implements $ClubDtoCopyWith<$Res> {
-  factory _$$ClubDtoImplCopyWith(
-    _$ClubDtoImpl value,
-    $Res Function(_$ClubDtoImpl) then,
-  ) = __$$ClubDtoImplCopyWithImpl<$Res>;
+abstract class _$$ClubFormDtoImplCopyWith<$Res>
+    implements $ClubFormDtoCopyWith<$Res> {
+  factory _$$ClubFormDtoImplCopyWith(
+    _$ClubFormDtoImpl value,
+    $Res Function(_$ClubFormDtoImpl) then,
+  ) = __$$ClubFormDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String name, String description, int ownerId});
+  $Res call({String name, String description});
 }
 
 /// @nodoc
-class __$$ClubDtoImplCopyWithImpl<$Res>
-    extends _$ClubDtoCopyWithImpl<$Res, _$ClubDtoImpl>
-    implements _$$ClubDtoImplCopyWith<$Res> {
-  __$$ClubDtoImplCopyWithImpl(
-    _$ClubDtoImpl _value,
-    $Res Function(_$ClubDtoImpl) _then,
+class __$$ClubFormDtoImplCopyWithImpl<$Res>
+    extends _$ClubFormDtoCopyWithImpl<$Res, _$ClubFormDtoImpl>
+    implements _$$ClubFormDtoImplCopyWith<$Res> {
+  __$$ClubFormDtoImplCopyWithImpl(
+    _$ClubFormDtoImpl _value,
+    $Res Function(_$ClubFormDtoImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of ClubDto
+  /// Create a copy of ClubFormDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? description = null,
-    Object? ownerId = null,
-  }) {
+  $Res call({Object? name = null, Object? description = null}) {
     return _then(
-      _$ClubDtoImpl(
-        id:
-            null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                    as int,
+      _$ClubFormDtoImpl(
         name:
             null == name
                 ? _value.name
@@ -138,11 +115,6 @@ class __$$ClubDtoImplCopyWithImpl<$Res>
                 ? _value.description
                 : description // ignore: cast_nullable_to_non_nullable
                     as String,
-        ownerId:
-            null == ownerId
-                ? _value.ownerId
-                : ownerId // ignore: cast_nullable_to_non_nullable
-                    as int,
       ),
     );
   }
@@ -150,84 +122,68 @@ class __$$ClubDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ClubDtoImpl implements _ClubDto {
-  const _$ClubDtoImpl({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.ownerId,
-  });
+class _$ClubFormDtoImpl implements _ClubFormDto {
+  const _$ClubFormDtoImpl({required this.name, required this.description});
 
-  factory _$ClubDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ClubDtoImplFromJson(json);
+  factory _$ClubFormDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ClubFormDtoImplFromJson(json);
 
-  @override
-  final int id;
   @override
   final String name;
   @override
   final String description;
-  @override
-  final int ownerId;
 
   @override
   String toString() {
-    return 'ClubDto(id: $id, name: $name, description: $description, ownerId: $ownerId)';
+    return 'ClubFormDto(name: $name, description: $description)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ClubDtoImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            other is _$ClubFormDtoImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.ownerId, ownerId) || other.ownerId == ownerId));
+                other.description == description));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, description, ownerId);
+  int get hashCode => Object.hash(runtimeType, name, description);
 
-  /// Create a copy of ClubDto
+  /// Create a copy of ClubFormDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ClubDtoImplCopyWith<_$ClubDtoImpl> get copyWith =>
-      __$$ClubDtoImplCopyWithImpl<_$ClubDtoImpl>(this, _$identity);
+  _$$ClubFormDtoImplCopyWith<_$ClubFormDtoImpl> get copyWith =>
+      __$$ClubFormDtoImplCopyWithImpl<_$ClubFormDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ClubDtoImplToJson(this);
+    return _$$ClubFormDtoImplToJson(this);
   }
 }
 
-abstract class _ClubDto implements ClubDto {
-  const factory _ClubDto({
-    required final int id,
+abstract class _ClubFormDto implements ClubFormDto {
+  const factory _ClubFormDto({
     required final String name,
     required final String description,
-    required final int ownerId,
-  }) = _$ClubDtoImpl;
+  }) = _$ClubFormDtoImpl;
 
-  factory _ClubDto.fromJson(Map<String, dynamic> json) = _$ClubDtoImpl.fromJson;
+  factory _ClubFormDto.fromJson(Map<String, dynamic> json) =
+      _$ClubFormDtoImpl.fromJson;
 
-  @override
-  int get id;
   @override
   String get name;
   @override
   String get description;
-  @override
-  int get ownerId;
 
-  /// Create a copy of ClubDto
+  /// Create a copy of ClubFormDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ClubDtoImplCopyWith<_$ClubDtoImpl> get copyWith =>
+  _$$ClubFormDtoImplCopyWith<_$ClubFormDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
