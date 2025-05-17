@@ -2,6 +2,7 @@
 import 'package:clubhub_mobile/features/clubs/domain/models/club_dto.dart';
 import 'package:clubhub_mobile/features/clubs/domain/models/club_form_dto.dart';
 import 'package:clubhub_mobile/features/clubs/presentation/vm_club_form.dart';
+import 'package:clubhub_mobile/features/clubs/presentation/vm_clubs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,10 +30,12 @@ class _ClubFormPageState extends ConsumerState<ClubFormPage> {
     final state = ref.watch(clubFormVmProvider);
     final vm = ref.read(clubFormVmProvider.notifier);
 
-    ref.listen(clubFormVmProvider, (p, n) {
-      if (n is ClubSuccess) Navigator.pop(context, true);
+    ref.listen<ClubFormState>(clubFormVmProvider, (prev, next) {
+      if (next is ClubSuccess) {
+        ref.invalidate(clubsVmProvider);
+        Navigator.pop(context, true);
+      }
     });
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.initial == null ? 'Nuevo club' : 'Editar club'),

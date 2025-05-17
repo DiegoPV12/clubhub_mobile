@@ -1,18 +1,18 @@
-// lib/features/clubs/presentation/club_detail_vm.dart
-import 'package:clubhub_mobile/core/user/current_user_provider.dart';
-import 'package:clubhub_mobile/features/clubs/data/clubs_repository.dart';
-import 'package:clubhub_mobile/features/clubs/data/members_repository.dart';
-import 'package:clubhub_mobile/features/clubs/data/membership_repository.dart';
-import 'package:clubhub_mobile/features/clubs/domain/models/club_dto.dart';
+// lib/features/clubs/presentation/vm_club_details.dart
+
 import 'package:clubhub_mobile/features/clubs/domain/models/member_dto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:clubhub_mobile/features/clubs/data/clubs_repository.dart';
+import 'package:clubhub_mobile/features/clubs/data/membership_repository.dart';
+import 'package:clubhub_mobile/features/clubs/data/members_repository.dart';
+import 'package:clubhub_mobile/features/clubs/domain/models/club_dto.dart';
+import 'package:clubhub_mobile/core/user/current_user_provider.dart';
 
-// …clase ClubDetailState…
 class ClubDetailState {
   final AsyncValue<ClubDto> club;
   final AsyncValue<List<MemberDto>> members;
   final bool isMember;
-  final bool isOwner; // ← NUEVO
+  final bool isOwner;
 
   ClubDetailState({
     required this.club,
@@ -46,7 +46,7 @@ class ClubDetailVM extends StateNotifier<ClubDetailState> {
           club: const AsyncLoading(),
           members: const AsyncLoading(),
           isMember: false,
-          isOwner: false, // ← init
+          isOwner: false,
         ),
       ) {
     _load();
@@ -59,18 +59,16 @@ class ClubDetailVM extends StateNotifier<ClubDetailState> {
   final int _currentUserId;
 
   Future<void> _load() async {
-    // Club
     final clubFuture = _clubsRepo.fetchClubs().then(
       (list) => list.firstWhere((c) => c.id == _clubId),
     );
-    // Members
     final membersFuture = _membersRepo.fetchMembers(_clubId);
 
     final results = await Future.wait([clubFuture, membersFuture]);
     final club = results[0] as ClubDto;
     final members = results[1] as List<MemberDto>;
     final isMember = members.any((m) => m.userId == _currentUserId);
-    final isOwner = club.ownerId == _currentUserId; // ← cálculo
+    final isOwner = club.ownerId == _currentUserId;
 
     state = state.copyWith(
       club: AsyncData(club),
@@ -80,27 +78,28 @@ class ClubDetailVM extends StateNotifier<ClubDetailState> {
     );
   }
 
-  // join() y leave() sin cambios excepto refrescar miembros
   Future<void> join() async {
     final ok = await _memRepo.join(_clubId);
-    if (ok) {
-      _load(); // recarga miembros y club
-    }
+    if (ok) _load();
   }
 
   Future<void> leave() async {
     final ok = await _memRepo.leave(_clubId);
-    if (ok) {
-      _load();
-    }
+    if (ok) _load();
+  }
+
+  /// ← NUEVO: Borra este club de la API
+  Future<void> deleteClub() async {
+    await _clubsRepo.delete(_clubId);
   }
 }
 
+/// Provider
 final clubDetailVmProvider = StateNotifierProvider.family
     .autoDispose<ClubDetailVM, ClubDetailState, int>((ref, clubId) {
       final userId = ref
           .watch(currentUserProvider)
-          .maybeWhen(data: (id) => id, orElse: () => 0);
+          .when(data: (u) => u.id, loading: () => 0, error: (_, __) => 0);
       return ClubDetailVM(
         clubId,
         ref.watch(clubsRepoProvider),

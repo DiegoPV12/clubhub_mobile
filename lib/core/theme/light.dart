@@ -24,30 +24,24 @@ final _scheme = ColorScheme.fromSeed(
 ).copyWith(primary: _seed); // forzamos primario exacto
 
 /// —— 3. TYPOGRAPHY (Inter) ——————————————————————————
-final _baseText = GoogleFonts.interTextTheme().apply(
-  bodyColor: _scheme.onSurface,
-  displayColor: _scheme.onSurface,
-);
-
-/// —— 3. TYPOGRAPHY (CherryBombOne) ——————————————————————————
-final _alterText = GoogleFonts.coinyTextTheme().apply(
+final _baseText = GoogleFonts.montserratTextTheme().apply(
   bodyColor: _scheme.onSurface,
   displayColor: _scheme.onSurface,
 );
 
 final TextTheme _textTheme = _baseText.copyWith(
   // Headlines (display)
-  headlineLarge: _alterText.headlineLarge?.copyWith(
-    fontSize: 64,
+  headlineLarge: _baseText.headlineLarge?.copyWith(
+    fontSize: 32,
     fontWeight: FontWeight.w600,
     decorationColor: Colors.black,
     decorationThickness: 2,
   ),
-  headlineMedium: _alterText.headlineMedium?.copyWith(
+  headlineMedium: _baseText.headlineMedium?.copyWith(
     fontSize: 28,
     fontWeight: FontWeight.w600,
   ),
-  headlineSmall: _alterText.headlineSmall?.copyWith(
+  headlineSmall: _baseText.headlineSmall?.copyWith(
     fontSize: 24,
     fontWeight: FontWeight.w600,
   ),

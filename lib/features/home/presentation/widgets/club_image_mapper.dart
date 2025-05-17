@@ -6,7 +6,7 @@ String getClubImagePath(int clubId) {
     case 2:
       return 'assets/images/chess_club.png';
     case 3:
-      return 'assets/images/club3.png';
+      return 'assets/images/dance_club.png';
     // Añade más casos según tu lista...
     default:
       return 'assets/images/club_default.png';

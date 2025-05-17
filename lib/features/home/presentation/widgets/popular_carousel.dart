@@ -1,6 +1,6 @@
 // lib/features/home/presentation/widgets/popular_carousel.dart
 import 'dart:async';
-import 'package:clubhub_mobile/features/home/presentation/widgets/club_promo_card';
+import 'package:clubhub_mobile/features/home/presentation/widgets/club_promo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../clubs/presentation/vm_clubs.dart';
