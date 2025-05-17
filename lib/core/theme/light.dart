@@ -29,11 +29,53 @@ final _baseText = GoogleFonts.interTextTheme().apply(
   displayColor: _scheme.onSurface,
 );
 
-TextTheme _textTheme = _baseText.copyWith(
-  titleLarge: _baseText.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+/// —— 3. TYPOGRAPHY (CherryBombOne) ——————————————————————————
+final _alterText = GoogleFonts.coinyTextTheme().apply(
+  bodyColor: _scheme.onSurface,
+  displayColor: _scheme.onSurface,
+);
+
+final TextTheme _textTheme = _baseText.copyWith(
+  // Headlines (display)
+  headlineLarge: _alterText.headlineLarge?.copyWith(
+    fontSize: 64,
+    fontWeight: FontWeight.w600,
+    decorationColor: Colors.black,
+    decorationThickness: 2,
+  ),
+  headlineMedium: _alterText.headlineMedium?.copyWith(
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+  ),
+  headlineSmall: _alterText.headlineSmall?.copyWith(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  ),
+
+  // Titles
+  titleLarge: _baseText.titleLarge?.copyWith(
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+  ),
+  titleMedium: _baseText.titleMedium?.copyWith(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  ),
+  titleSmall: _baseText.titleSmall?.copyWith(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+  ),
+
+  // Bodies (ya los tenías)
   bodyLarge: _baseText.bodyLarge?.copyWith(fontSize: 16),
   bodyMedium: _baseText.bodyMedium?.copyWith(fontSize: 14),
   bodySmall: _baseText.bodySmall?.copyWith(fontSize: 12),
+
+  // Opcional: labels
+  labelLarge: _baseText.labelLarge?.copyWith(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  ),
 );
 
 /// —— 4. COMPONENT THEMES ——————————————————————————

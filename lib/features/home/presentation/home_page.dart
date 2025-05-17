@@ -1,11 +1,14 @@
 // lib/features/home/presentation/home_page.dart
+import 'package:clubhub_mobile/core/theme/light.dart';
 import 'package:clubhub_mobile/core/user/current_user_provider.dart';
-import 'package:clubhub_mobile/features/clubs/data/clubs_repository.dart';
-import 'package:clubhub_mobile/features/clubs/presentation/club_form_page.dart';
+import 'package:clubhub_mobile/core/widgets/search_bar_m3.dart';
+import 'package:clubhub_mobile/features/home/presentation/widgets/popular_carousel.dart';
+import 'package:clubhub_mobile/features/home/presentation/widgets/promotional_carousel.dart';
+import 'package:clubhub_mobile/features/home/presentation/widgets/promo.dart';
+import 'package:clubhub_mobile/features/clubs/presentation/vm_clubs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../clubs/presentation/vm_clubs.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -17,112 +20,158 @@ class HomePage extends ConsumerWidget {
         .watch(currentUserProvider)
         .maybeWhen(data: (id) => id, orElse: () => 0);
 
+    // Mock de promos
+    final promos = <Promo>[
+      const Promo(
+        title: 'Únete a nuevos clubs',
+        subtitle: 'Descubre grupos afines a tus intereses',
+        color: Colors.deepPurple,
+        imagePath: 'assets/images/promo_join.png',
+      ),
+      const Promo(
+        title: 'Organiza eventos',
+        subtitle: 'Crea y gestiona encuentros fácilmente',
+        color: Colors.indigo,
+        imagePath: 'assets/images/promo_events.png',
+      ),
+      const Promo(
+        title: 'Interactúa',
+        subtitle: 'Chatea y colabora con la comunidad',
+        color: Colors.teal,
+        imagePath: 'assets/images/promo_chat.png',
+      ),
+    ];
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Clubes')),
-
-      // -------- LISTA DE CLUBES -----------------------------------------
-      body: asyncClubs.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
-        data:
-            (list) => ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: list.length,
-              separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (_, i) {
-                final club = list[i];
-                final isOwner = club.ownerId == currentUserId;
-
-                return ListTile(
-                  title: Text(club.name),
-                  subtitle: Text(club.description),
-                  onTap: () => context.push('/clubs/${club.id}'),
-
-                  // Menú contextual solo para propietarios
-                  onLongPress:
-                      isOwner
-                          ? () async {
-                            final action = await showMenu<String>(
-                              context: context,
-                              position: const RelativeRect.fromLTRB(
-                                200,
-                                400,
-                                0,
-                                0,
-                              ),
-                              items: const [
-                                PopupMenuItem(
-                                  value: 'edit',
-                                  child: Text('Editar'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'delete',
-                                  child: Text('Eliminar'),
-                                ),
-                              ],
-                            );
-
-                            if (action == 'edit') {
-                              final updated = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ClubFormPage(initial: club),
-                                ),
-                              );
-                              if (updated == true) {
-                                ref.invalidate(clubsVmProvider);
-                              }
-                            } else if (action == 'delete') {
-                              final confirm = await showDialog<bool>(
-                                context: context,
-                                builder:
-                                    (_) => AlertDialog(
-                                      title: const Text('Eliminar club'),
-                                      content: const Text(
-                                        '¿Seguro que deseas eliminar este club?',
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed:
-                                              () =>
-                                                  Navigator.pop(context, false),
-                                          child: const Text('Cancelar'),
-                                        ),
-                                        FilledButton(
-                                          onPressed:
-                                              () =>
-                                                  Navigator.pop(context, true),
-                                          child: const Text('Eliminar'),
-                                        ),
-                                      ],
-                                    ),
-                              );
-                              if (confirm == true) {
-                                await ref
-                                    .read(clubsRepoProvider)
-                                    .delete(club.id);
-                                ref.invalidate(clubsVmProvider);
-                              }
-                            }
-                          }
-                          : null,
-                );
-              },
-            ),
+      // AppBar transparente con título de la app
+      appBar: AppBar(
+        title: const Text('ClubHub'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
 
-      // -------- FAB CREAR CLUB ------------------------------------------
+      body: CustomScrollView(
+        slivers: [
+          // SearchBar flotante
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            title: const SearchBarM3(),
+          ),
+
+          // Sección: Promociones
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.sm,
+              ),
+              child: Text(
+                'Promociones',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              child: PromotionalCarousel(promos: promos),
+            ),
+          ),
+
+          // Sección: Popular Clubs
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.sm,
+              ),
+              child: Text(
+                'Popular Clubs',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              child: PopularCarousel(),
+            ),
+          ),
+
+          // Sección: Mis clubes
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.sm,
+              ),
+              child: Text(
+                'Mis clubes',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ),
+
+          // Lista de clubes
+          asyncClubs.when(
+            loading:
+                () => SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+            error:
+                (e, _) => SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(child: Text('Error: $e')),
+                ),
+            data:
+                (list) => SliverList(
+                  delegate: SliverChildBuilderDelegate((_, i) {
+                    final club = list[i];
+                    final isOwner = club.ownerId == currentUserId;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                        vertical: AppSpacing.xs,
+                      ),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        tileColor:
+                            Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                        title: Text(club.name),
+                        subtitle: Text(club.description),
+                        onTap: () => context.push('/clubs/${club.id}'),
+                        onLongPress:
+                            isOwner
+                                ? () {
+                                  /*…*/
+                                }
+                                : null,
+                      ),
+                    );
+                  }, childCount: list.length),
+                ),
+          ),
+        ],
+      ),
+
+      // FAB crear club
       floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/clubs/new'),
         child: const Icon(Icons.add),
-        onPressed: () async {
-          final created = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ClubFormPage()),
-          );
-          if (created == true) {
-            ref.invalidate(clubsVmProvider); // refrescar lista
-          }
-        },
       ),
     );
   }
